@@ -291,12 +291,17 @@ private class Network {
     }
 }
 
+
+
 object SomosKudasai {
+
+
 
     /**
      * Instance of network class in private
      */
     private val network : Network = Network()
+
 
 
     /**
