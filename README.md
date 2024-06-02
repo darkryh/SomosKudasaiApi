@@ -19,8 +19,8 @@ ViewModel() {
 
 	fun getHome(context : Context) = viewModelScope.launch(IO) {
 
-    //Getting Home object
-		val home = SomosKudasai.getHome()
+            // Getting Home object
+            val home = SomosKudasai.getHome()
 
             // Getting the recent news retun a list of NewsPreview
             val recentNews  = home?.recentNews ?: return@launch
