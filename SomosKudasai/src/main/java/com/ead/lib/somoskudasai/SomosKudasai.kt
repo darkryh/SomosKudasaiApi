@@ -21,14 +21,35 @@ import com.ead.lib.somoskudasai.models.html_tags.Video
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
+/**
+ * Private class network to make request
+ * from provider SomosKudasai
+ */
 private class Network {
 
+    /**
+     * collector structure to add every tag
+     * on the main detail about news in SomosKudasai
+     */
     private val collectorStructure = mutableListOf<Tag>()
 
+
+    /**
+     * get home page of SomosKudasai
+     * in one Instance collecting different types of news
+     * trends, recent news, japan news, otaku culture and reviews
+     */
     suspend fun getHome() : Home? {
 
+        /**
+         * connecting to home page of SomosKudasai
+         */
         val somosKudasaiPage = Jsoup.connect(Properties.MAIN_URL).get().suspend() ?: return null
 
+        /**
+         * mapping to Home
+         * and scrapping the types of news
+         */
         return Home(
             trendsOfTheWeek = getTrendsOfTheWeek(somosKudasaiPage),
             recentNews = getRecentNews(somosKudasaiPage),
@@ -38,6 +59,11 @@ private class Network {
         )
     }
 
+
+    /**
+     * get trends of the week with jsoup parsing
+     * and mapping to NewsPreview
+     */
     private fun getTrendsOfTheWeek(page : Document) : List<NewsPreview>  {
 
         val classListItems = page
@@ -55,6 +81,12 @@ private class Network {
         }
     }
 
+
+
+    /**
+     * get recent news with jsoup parsing
+     * and mapping to NewsPreview
+     */
     private fun getRecentNews(page : Document) : List<NewsPreview>  {
 
         val classListItems = page
@@ -73,6 +105,11 @@ private class Network {
     }
 
 
+
+    /**
+     * get japan news with jsoup parsing
+     * and mapping to NewsPreview
+     */
     private fun getJapanNews(page : Document) : List<NewsPreview>  {
 
         val classListItems = page
@@ -90,6 +127,11 @@ private class Network {
         }
     }
 
+
+    /**
+     * get otaku culture with jsoup parsing
+     * and mapping to NewsPreview
+     */
     private fun getOtakuCulture(page : Document) : List<NewsPreview>  {
 
         val section = page.select("section.bx.pdy2.lg-pdy4.por.drk").getOrNull(1) ?: return emptyList()
@@ -107,6 +149,11 @@ private class Network {
         }
     }
 
+
+    /**
+     * get reviews with jsoup parsing
+     * and mapping to NewsPreview
+     */
     private fun getReviews(page : Document) : List<NewsPreview>  {
 
         val classListItems = page
@@ -124,21 +171,59 @@ private class Network {
         }
     }
 
+
+    /**
+     * get news info with jsoup parsing
+     * separating the news in sections, header and footer
+     * and collecting the Metadata from sections
+     * finally parsing every detail into Tag
+     */
     suspend fun getNewsInfo(url : String) : News? {
 
+        /**
+         * get news page with jsoup
+         */
         val newsPage = Jsoup.connect(url).get().suspend() ?: return null
 
+
+        /**
+         * get header and footer section
+         */
         val headerSection = newsPage.select("section.single.por.z1.pdb4")
         val footerSection = newsPage.select("section.bx.bx-thr.dfx.fxw.pdt3.mab3.pdb1 div.dfx.aic.mab1.sm-fg1.sm-mar1")
 
         return News(
+            /**
+             * Getting title
+             */
             title = headerSection.select("article.ar.lg.sngl.pdt4 header.ar-hd.por.z2.pdl3 h1.ar-title.white-co.mab1.pdt.fz5.lg-fz7.xl-fz8.mar").text(),
+            /**
+             * Getting image
+             */
             image = headerSection.select("article.ar.lg.sngl.pdt4 figure.im.black-bg.z-1 img.attachment-post-thumbnail.size-post-thumbnail.wp-post-image").src(),
+            /**
+             * Getting type of news
+             */
             type = headerSection.select("article.ar.lg.sngl.pdt4 header.ar-hd.por.z2.pdl3 p.mab0 span.typ.ttu.fwb.fz2.white-bg.primary-co.brd1.dib.pdx1.mab.mar").text(),
+            /**
+             * Getting date
+             */
             date = headerSection.select("article.ar.lg.sngl.pdt4 header.ar-hd.por.z2.pdl3 div.ar-mt.white-co span.op5.mar2").text(),
+            /**
+             * Getting author
+             */
             author = headerSection.select("article.ar.lg.sngl.pdt4 header.ar-hd.por.z2.pdl3 div.ar-mt.white-co span.fwb.op7.mar2").text(),
+            /**
+             * Getting author image
+             */
             authorImage = footerSection.select("figure.avatar.mar2.ast img.brdc").src(),
+            /**
+             * Getting author name
+             */
             authorWords = footerSection.select("div.fg1 p.mab0").text(),
+            /**
+             * Getting tags
+             */
             structure =  collectorStructure.apply {
 
                 clear()
@@ -208,9 +293,20 @@ private class Network {
 
 object SomosKudasai {
 
+    /**
+     * Instance of network class in private
+     */
     private val network : Network = Network()
 
+
+    /**
+     * get home page of SomosKudasai
+     */
     suspend fun getHome() = network.getHome()
 
+
+    /**
+     * get news info of a news
+     */
     suspend fun getNewsInfo(url : String) = network.getNewsInfo(url)
 }
