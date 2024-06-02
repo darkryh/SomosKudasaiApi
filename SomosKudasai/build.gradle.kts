@@ -41,7 +41,7 @@ publishing {
             }
 
             groupId = "com.ead.lib"
-            artifactId = "Somoskudasai"
+            artifactId = "SomosKudasai"
             version = "0.0.1"
         }
     }
