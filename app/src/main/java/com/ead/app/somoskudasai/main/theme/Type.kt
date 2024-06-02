@@ -1,4 +1,4 @@
-package com.ead.app.somoskudasai.ui.theme
+package com.ead.app.somoskudasai.main.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
