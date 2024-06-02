@@ -32,7 +32,7 @@ ViewModel() {
 	}
 }
 ```
-# Example of different tags for binding
+# Example of binding with different tags
 You can check example in the app in compose too.
 ```kotlin
 ViewModel() {
