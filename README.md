@@ -17,7 +17,7 @@ dependencies {
 ```kotlin
 ViewModel() {
 
-	fun getHome(context : Context) = viewModelScope.launch(IO) {
+	fun getHome() = viewModelScope.launch(IO) {
 
             // Getting Home object
             val home = SomosKudasai.getHome()
