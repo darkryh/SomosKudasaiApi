@@ -10,7 +10,7 @@ repositories {
 }  
   
 dependencies {  
-	implementation("com.github.darkryh:MonosChinosApi:$version")
+	implementation("com.github.darkryh:SomosKudasai:$version")
 }  
 ```  
 # Example to get HomePage and search the especific new - Use Case
